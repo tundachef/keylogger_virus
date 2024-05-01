@@ -49,7 +49,6 @@ if __name__ == "__main__":
         import wave
         # import pyscreenshot
         import sounddevice as sd
-        import pypnut
         from pynput.keyboard import Key, Listener  # Import Key and Listener directly
         # from pynput import keyboard
         from email import encoders
