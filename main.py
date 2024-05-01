@@ -1,22 +1,22 @@
 import os
 import sys
 import subprocess
-import ctypes
-from ctypes import windll
+# import ctypes
+# from ctypes import windll
 
-def is_admin():
-    try:
-        return windll.shell32.IsUserAnAdmin()
-    except:
-        return False
-
-def run_as_admin():
-    if is_admin():
-        return True
-    else:
-        # Run the script again as administrator
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
-        return False
+# def is_admin():
+#     try:
+#         return windll.shell32.IsUserAnAdmin()
+#     except:
+#         return False
+#
+# def run_as_admin():
+#     if is_admin():
+#         return True
+#     else:
+#         # Run the script again as administrator
+#         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+#         return False
 
 def add_to_startup():
     try:
@@ -33,8 +33,8 @@ def add_to_startup():
         print("Error adding script to Windows startup:", e)
 
 if __name__ == "__main__":
-    if not run_as_admin():
-        sys.exit(0)  # Exit the script if not running as administrator
+    # if not run_as_admin():
+    #     sys.exit(0)  # Exit the script if not running as administrator
 
     add_to_startup()
 
